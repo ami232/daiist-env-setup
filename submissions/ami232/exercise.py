@@ -55,9 +55,7 @@ def pandas_revenue_by_region(sales: pd.DataFrame) -> pd.DataFrame:
     return a DataFrame with columns ["region", "revenue"] — total revenue per
     region, where revenue = quantity * unit_price.
     """
-    revenue_sales = sales.assign(
-        revenue=sales["quantity"] * sales["unit_price"]
-    )
+    revenue_sales = sales.assign(revenue=sales["quantity"] * sales["unit_price"])
     return revenue_sales.groupby("region", as_index=False).agg(
         revenue=("revenue", "sum")
     )
@@ -79,7 +77,7 @@ def pandas_region_share(sales: pd.DataFrame) -> pd.DataFrame:
     grand_total = regional["revenue"].sum()
     result = regional.assign(total_revenue=grand_total)
     result["share"] = result["revenue"] / result["total_revenue"]
-    return result[["region", "revenue", "share"]]
+    return result[["region", "revenue", "share"]] + 3
 
 
 # ---------------------------------------------------------------------------
