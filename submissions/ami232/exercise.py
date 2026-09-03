@@ -44,8 +44,7 @@ def numpy_order_revenues(quantities: np.ndarray, unit_prices: np.ndarray) -> np.
 
 def numpy_average_order_value(quantities: np.ndarray, unit_prices: np.ndarray) -> float:
     """Return the average revenue across all orders, as a plain float."""
-    # TODO: reuse numpy_order_revenues() and take its mean
-    raise NotImplementedError
+    return float(np.mean(numpy_order_revenues(quantities, unit_prices)))
 
 
 # ---------------------------------------------------------------------------
