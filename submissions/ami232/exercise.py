@@ -55,8 +55,10 @@ def pandas_revenue_by_region(sales: pd.DataFrame) -> pd.DataFrame:
     return a DataFrame with columns ["region", "revenue"] — total revenue per
     region, where revenue = quantity * unit_price.
     """
-    # TODO: add a revenue column, then group by region and sum it
-    raise NotImplementedError
+    sales = sales.copy()
+    sales["revenue"] = sales["quantity"] * sales["unit_price"]
+    return sales.groupby("region")["revenue"].sum().reset_index()
+
 
 
 def pandas_region_share(sales: pd.DataFrame) -> pd.DataFrame:
