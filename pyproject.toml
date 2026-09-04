@@ -4,17 +4,21 @@ version = "0.1.0"
 description = "Environment setup verification exercise"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "numpy>=2.0",
+    "numpy>=2.0; sys_platform != 'darwin' or platform_machine != 'x86_64'",
+    "numpy<2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
     "pandas>=2.2",
     "scikit-learn>=1.5",
     "matplotlib>=3.9",
     "ipykernel>=6.29",
-    "torch>=2.4",
+    "torch==2.2.2; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+    "torch==2.14.0; sys_platform != 'darwin' or platform_machine != 'x86_64'",
     "pytest>=8.0",
 ]
 
 [tool.uv.sources]
-torch = [{ index = "pytorch-cpu" }]
+torch = [
+    { index = "pytorch-cpu", marker = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+]
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
