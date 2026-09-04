@@ -13,6 +13,12 @@ dependencies = [
     "pytest>=8.0",
 ]
 
+[tool.uv]
+required-environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+]
+
 [tool.uv.sources]
 torch = [{ index = "pytorch-cpu" }]
 

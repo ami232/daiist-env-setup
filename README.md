@@ -38,6 +38,13 @@ Then close and reopen your terminal, and confirm it worked:
 uv --version
 ```
 
+> **Can't get `uv sync` to install PyTorch on your machine?** Some laptops
+> can't run this stack locally at all — most notably **Intel-based Macs**
+> (PyTorch stopped publishing wheels for that platform in 2024, and there's no
+> version we can pin around it). If that's you, skip to
+> [Alternative: GitHub Codespaces](#alternative-no-local-install-github-codespaces)
+> below instead of fighting your local setup.
+
 ## 2. Fork and clone this repo
 
 1. Click **Fork** at the top of this repo's GitHub page (creates your own copy
@@ -119,6 +126,24 @@ PR, copy the PR's URL and submit it to the Blackboard assignment for this
 session — before the session ends.
 
 ---
+
+## Alternative: no-local-install (GitHub Codespaces)
+
+If your machine can't run this stack locally (Intel Mac, an old OS, a locked-
+down corporate Windows laptop, etc.), you can do the whole exercise in a free
+cloud dev environment instead — no install on your machine at all:
+
+1. Fork the repo (same as step 2 above).
+2. On your fork's GitHub page, click **Code → Codespaces → Create codespace
+   on main**.
+3. Wait for it to finish building (it runs `uv sync` for you automatically) —
+   you'll land in a full VS Code environment in your browser, already set up.
+4. Open a terminal in that browser VS Code (``Ctrl+` ``) and continue from
+   **step 5** above (do the exercise, run the autograder, commit, push, open
+   the PR) — all from that same in-browser terminal.
+
+This uses your own free GitHub Codespaces quota, not the instructor's — it
+won't cost you anything for an exercise this size.
 
 ## Troubleshooting
 

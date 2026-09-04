@@ -39,14 +39,12 @@ def numpy_order_revenues(quantities: np.ndarray, unit_prices: np.ndarray) -> np.
 
     Must be a vectorized operation - no Python-level for loop.
     """
-    # TODO: replace the line below
-    raise NotImplementedError
+    return quantities * unit_prices
 
 
 def numpy_average_order_value(quantities: np.ndarray, unit_prices: np.ndarray) -> float:
     """Return the average revenue across all orders, as a plain float."""
-    # TODO: reuse numpy_order_revenues() and take its mean
-    raise NotImplementedError
+    return float(numpy_order_revenues(quantities, unit_prices).mean())
 
 
 # ---------------------------------------------------------------------------
@@ -57,9 +55,11 @@ def pandas_revenue_by_region(sales: pd.DataFrame) -> pd.DataFrame:
     return a DataFrame with columns ["region", "revenue"] — total revenue per
     region, where revenue = quantity * unit_price.
     """
-    # TODO: add a revenue column, then group by region and sum it
-    raise NotImplementedError
-
+    return (
+        sales.assign(revenue=sales["quantity"] * sales["unit_price"])
+        .groupby("region", as_index=False)["revenue"]
+        .sum()
+    )
 
 def pandas_region_share(sales: pd.DataFrame) -> pd.DataFrame:
     """Return a DataFrame with columns ["region", "revenue", "share"], where
@@ -69,8 +69,12 @@ def pandas_region_share(sales: pd.DataFrame) -> pd.DataFrame:
     Build this by merging the per-region totals from pandas_revenue_by_region()
     with the grand total (rather than hand-computing division in a loop).
     """
-    # TODO
-    raise NotImplementedError
+    by_region = pandas_revenue_by_region(sales)
+    grand_total = by_region["revenue"].sum()
+    totals = pd.DataFrame({"key": [1], "total_revenue": [grand_total]})
+    merged = by_region.assign(key=1).merge(totals, on="key").drop(columns="key")
+    merged["share"] = merged["revenue"] / merged["total_revenue"]
+    return merged[["region", "revenue", "share"]]
 
 
 # ---------------------------------------------------------------------------
@@ -82,32 +86,25 @@ def sql_revenue_by_region(csv_path: Path) -> pd.DataFrame:
     SQL equivalent of pandas_revenue_by_region(), computed with a SQL GROUP BY
     query (not by loading the table and using pandas groupby).
     """
-    # TODO: read the CSV into a DataFrame, write it into an in-memory sqlite3
-    # connection with DataFrame.to_sql(), then run a SELECT ... GROUP BY query
-    # and return the result via pd.read_sql, see the example below:
-    # sales = pd.read_csv(csv_path)
-    # with sqlite3.connect(":memory:") as connection:
-    #     sales.to_sql("sales", connection, index=False, if_exists="replace")
-    #     return pd.read_sql(
-    #         """
-    #         SELECT ...
-    #         FROM sales
-    #         ...
-    #         """,
-    #         connection,
-    #     )
-    raise NotImplementedError
+    sales = pd.read_csv(csv_path)
+    with sqlite3.connect(":memory:") as connection:
+        sales.to_sql("sales", connection, index=False, if_exists="replace")
+        return pd.read_sql(
+            """
+            SELECT region, SUM(quantity * unit_price) AS revenue
+            FROM sales
+            GROUP BY region
+            """,
+            connection,
+        )
 
 
 # ---------------------------------------------------------------------------
 # 4. Deep learning stack check
 # ---------------------------------------------------------------------------
 def check_torch_installed() -> float:
-    """Prove torch is installed and working: build a 1-D tensor [1.0, 2.0, 3.0]
-    and return the sum of its elements as a plain float.
-    """
-    # TODO
-    raise NotImplementedError
+    tensor = torch.tensor([1.0, 2.0, 3.0])
+    return float(tensor.sum().item())
 
 
 if __name__ == "__main__":
